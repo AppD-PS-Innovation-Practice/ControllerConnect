@@ -1,7 +1,20 @@
 version: '3.9'
 
 services:
-
+  ui:
+    build:
+      context: ../
+      dockerfile: ./run_time/Dockerfile-Node
+    working_dir: /home/node/app
+    environment:
+        - NODE_ENV=production
+    volumes:
+        - ./ui:/home/node/app
+    expose:
+        - "3000"
+    ports: # use if it is necessary to expose the container to the host machine
+        - "3000:3000"
+    command: "npm start"
   db:
     image: postgres:17-alpine
     restart: always
@@ -15,14 +28,17 @@ services:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     ports:
       - 5432:5432
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
     environment:
       POSTGRES_PASSWORD: example
       POSTGRES_USER: postgres
       POSTGRES_DB: controller_connect
+      PGDATA: /var/lib/postgresql/data/pgdata
       #POSTGRES_INITDB_ARGS
       #POSTGRES_INITDB_WALDIR
       #POSTGRES_HOST_AUTH_METHOD
-      #PGDATA
 
 
   adminer:

@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .idea
+src/ui/.idea
+run_time/pg_data/pgdata
+run_time/ui/*
