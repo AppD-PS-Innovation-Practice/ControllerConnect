@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1 Search Results for "#{query}"
+    if results.length
+        ul.list-group
+            each result in results
+                li.list-group-item= result.app_name
+    else
+        p No results found.
