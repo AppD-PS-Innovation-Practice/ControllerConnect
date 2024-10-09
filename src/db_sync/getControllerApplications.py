@@ -60,7 +60,7 @@ def main(loglevel, db_ini_filename):
             collect new
             """
             with conn.cursor() as cur:
-                cur.execute("SELECT controller, client_id, client_secret FROM controllers ORDER BY controller")
+                cur.execute("SELECT controller_name, client_id, client_secret FROM controllers ORDER BY controller_name")
                 print("The number of controllers: ", cur.rowcount)
                 row = cur.fetchone()
 
