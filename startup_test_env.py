@@ -1,11 +1,28 @@
 import os
 import shutil
 import time
+import argparse
+# Initialize the parser
+parser = argparse.ArgumentParser(description='Process some command line arguments.')
+# Add the --dbclean argument
+parser.add_argument('--dbclean', action='store_true', help='Clean the database')
+# Parse the arguments
+args = parser.parse_args()
+
 #clean ui mount
 os.chdir('./run_time')
 os.system('docker compose down')
 time.sleep(5)
 os.chdir('..')
+
+# Check if --dbclean is present
+if args.dbclean:
+    with os.scandir('./run_time/pg_data') as entries:
+        for entry in entries:
+            if entry.is_file():
+                os.unlink(entry.path)
+            else:
+                shutil.rmtree(entry.path)
 with os.scandir('./run_time/ui') as entries:
     for entry in entries:
         if entry.is_file():
