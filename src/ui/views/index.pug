@@ -1,5 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 AppDynamics Controller Connect
+  p Use the form below to search for controllers.
+
+  form(action="/search" method="GET")
+    .form-group
+      label(for="searchQuery") Search Query:
+      input#searchQuery.form-control(type="text" name="query" placeholder="Enter search term" required)
+    .form-group
+      button.btn.btn-primary(type="submit") Search
+
