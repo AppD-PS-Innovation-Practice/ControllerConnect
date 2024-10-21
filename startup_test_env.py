@@ -37,8 +37,12 @@ shutil.copy('./src/ui/app.js', './run_time/ui')
 shutil.copytree('./src/ui/bin','./run_time/ui/bin')
 shutil.copytree('./src/ui/public','./run_time/ui/public')
 shutil.copytree('./src/ui/routes','./run_time/ui/routes')
+shutil.copytree('./src/ui/models','./run_time/ui/models')
 shutil.copytree('./src/ui/views','./run_time/ui/views')
 shutil.copytree('./src/ui/node_modules', './run_time/ui/node_modules')
+
+shutil.copy('./src/db_sync/getControllerApplications.py', './run_time/db_sync')
+
 print('Sleeping before doing docker compose with build...')
 time.sleep(15)
 #maybe force build

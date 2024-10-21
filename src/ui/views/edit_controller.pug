@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 #{title}
+  form(method='POST', action='/controllers/edit/'+query)
+    .form-group
+      label Controller Name:
+      input.form-control(name='controller_name', type='text', value=results.controller_name)
+    .form-group
+      label Client ID:
+      input.form-control(name='client_id', type='text', value=results.client_id)
+    .form-group
+      label Client Secret:
+      input.form-control(name='client_secret', type='text', value=results.client_secret)
+    br
+    input.btn.btn-primary(type='submit', value='Submit')

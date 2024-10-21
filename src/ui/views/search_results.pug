@@ -15,7 +15,7 @@ block content
         ul.list-group
             each result in results
                 li.list-group-item
-                    a(href=`https://${result.controller_name}.saas.appdynamics.com/controller/#/location=APP_DASHBOARD&application=${result.app_id}` target="_blank")= result.app_name
+                    a(href=`https://${result.controller_name}.saas.appdynamics.com/controller/#/location=APP_DASHBOARD&application=${result.app_id}` target="_blank")= result.controller_name + "---" + result.app_name
 
     else
         p No results found.

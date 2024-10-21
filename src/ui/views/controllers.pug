@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 AppDynamics Controller Connect - Controller CRUD
+
+    if results.length
+        ul.list-group
+            each result in results
+                li.list-group-item
+                    a(href='/controllers/'+result.id)= result.controller_name
+    else
+        p No results found.
+
+    a(href='/controllers/add') Add Controller

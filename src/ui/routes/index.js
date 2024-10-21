@@ -13,7 +13,7 @@ const pool = new Pool({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'ConCon' });
 });
 
 // Route for the search functionality
@@ -25,7 +25,7 @@ router.get('/search', async (req, res) => {
 
   try {
     const result = await pool.query(
-        'SELECT * FROM applications WHERE app_name ILIKE $1',
+        'SELECT * FROM applications WHERE app_name ILIKE $1 ORDER BY controller_name, app_name',
         [`%${searchQuery}%`]
     );
     res.render('search_results', {

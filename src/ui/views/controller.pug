@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 AppDynamics Controller Connect
+  h1 #{title}
+  h5 Controller Details
+  p #{results.controller_name}
+  p #{results.client_id}
+  p #{results.client_secret}
+  a.btn.btn-default(href='/controllers/edit/'+query) Edit
+  a.btn.btn-danger.delete-controller(href='#', data-id=query) Delete

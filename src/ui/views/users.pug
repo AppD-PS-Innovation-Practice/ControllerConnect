@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 AppDynamics Controller Connect - User CRUD
+
+    if results.length
+        ul.list-group
+            each result in results
+                li.list-group-item
+                    a(href='/users/'+result.id)= result.user_id
+    else
+        p No results found.
+
+    a(href='/users/add') Add User
+
+
