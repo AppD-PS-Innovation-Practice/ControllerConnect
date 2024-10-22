@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS applications (
 
 CREATE TABLE IF NOT EXISTS admin (
   id SERIAL PRIMARY KEY,
-  user_id varchar(250) NOT NULL,
   user_pass varchar(250) NOT NULL,
   user_email varchar(250) NOT NULL
 );
