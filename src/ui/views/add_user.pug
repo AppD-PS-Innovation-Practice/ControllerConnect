@@ -4,13 +4,10 @@ block content
   h1 AppDynamics Controller Connect
   form(method='POST', action='/users/add')
     .form-group
-      label User ID:
-      input.form-control(name='user_id', type='text')
+      label User Email:
+      input.form-control(name='user_email', type='text')
     .form-group
       label User Password:
       input.form-control(name='user_pass', type='text')
-    .form-group
-      label User Email:
-      input.form-control(name='user_email', type='text')
     br
     input.btn.btn-primary(type='submit', value='Submit')

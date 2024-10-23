@@ -81,18 +81,24 @@ const User = require('../models/user');
 
 /* list all users */
 router.get('/users/', async (req, res) => {
-  try {
-    const result = await pool.query(
-        'SELECT * FROM Admin'
-    );
-    res.render('users', {
-      title: 'Users',
-      results: result.rows,
-    });
-  } catch (error) {
-    console.error('Error executing user list', error.stack);
-    res.status(500).send('Internal Server Error');
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'SELECT * FROM admin'
+      );
+      res.render('users', {
+        title: 'Users',
+        results: result.rows,
+      });
+    } catch (error) {
+      console.error('Error executing user list', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
   }
+  else {
+    res.redirect('/login');
+  }
+
 });
 
 // new user form
@@ -106,9 +112,10 @@ router.get('/users/add', async (req, res) => {
 router.post('/users/add', async (req, res) => {
 
   try {
+    var pwd = await bcrypt.hash(req.body.user_pass, 5);
     const result = await pool.query(
-        'INSERT INTO Admin (user_id, user_pass, user_email) VALUES ($1, $2, $3)',
-        [req.body.user_id, req.body.user_pass, req.body.user_email]
+        'INSERT INTO admin (user_email, user_pass) VALUES ($1, $2)',
+        [req.body.user_email, pwd]
     );
 
     res.render('results', {
@@ -360,13 +367,13 @@ passport.use('local', new LocalStrategy({passReqToCallback : true}, (req, userna
               return done(null, false);
             }
             else{
-              bcrypt.compare(password, result.rows[0].password, function(err, check) {
+              bcrypt.compare(password, result.rows[0].user_pass, function(err, check) {
                 if (err){
                   console.log('Error while checking password');
                   return done();
                 }
                 else if (check){
-                  return done(null, [{email: result.rows[0].email, firstName: result.rows[0].firstName}]);
+                  return done(null, [{email: result.rows[0].user_email}]);
                 }
                 else{
                   req.flash('danger', "Oops. Incorrect login details.");

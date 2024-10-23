@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({secret: 'appDControllerConnectSecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session({}));
-
+app.use(flash());
 
 app.use('/', indexRouter);
 

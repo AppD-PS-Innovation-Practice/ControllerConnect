@@ -4,8 +4,8 @@ block content
   h1 AppDynamics Controller Connect
   h1 #{title}
   h5 User Details
-  p #{results.user_id}
-  p #{results.user_pass}
+  p #{results.id}
   p #{results.user_email}
+  p #{results.user_pass}
   a.btn.btn-default(href='/users/edit/'+query) Edit
   a.btn.btn-danger.delete-user(href='#', data-id=query) Delete

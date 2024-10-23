@@ -7,7 +7,7 @@ block content
         ul.list-group
             each result in results
                 li.list-group-item
-                    a(href='/users/'+result.id)= result.user_id
+                    a(href='/users/'+result.id)= result.id
     else
         p No results found.
 
