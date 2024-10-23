@@ -103,114 +103,141 @@ router.get('/users/', async (req, res) => {
 
 // new user form
 router.get('/users/add', async (req, res) => {
-  res.render('add_user', {
-    title: 'Add User'
-  });
+  if(req.isAuthenticated()) {
+    res.render('add_user', {
+      title: 'Add User'
+    });
+  }
+  else {
+      res.redirect('/login');
+    }
 });
 
 // submit new user
 router.post('/users/add', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      var pwd = await bcrypt.hash(req.body.user_pass, 5);
+      const result = await pool.query(
+          'INSERT INTO admin (user_email, user_pass) VALUES ($1, $2)',
+          [req.body.user_email, pwd]
+      );
 
-  try {
-    var pwd = await bcrypt.hash(req.body.user_pass, 5);
-    const result = await pool.query(
-        'INSERT INTO admin (user_email, user_pass) VALUES ($1, $2)',
-        [req.body.user_email, pwd]
-    );
-
-    res.render('results', {
-      title: 'SUCCESS - User Added',
-      results: 'SUCCESS - User Added',
-      goback: '/users/'
-    });
-  } catch (error) {
-    console.error('Error executing user add', error.stack);
-    res.status(500).send('Internal Server Error');
+      res.render('results', {
+        title: 'SUCCESS - User Added',
+        results: 'SUCCESS - User Added',
+        goback: '/users/'
+      });
+    } catch (error) {
+      console.error('Error executing user add', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 
 });
 
 // load edit form
 router.get('/users/edit/:id', async (req, res) => {
-  try {
-    const result = await pool.query(
-        'SELECT * FROM Admin WHERE id=$1',
-        [req.params.id]
-    );
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'SELECT * FROM Admin WHERE id=$1',
+          [req.params.id]
+      );
 
-    res.render('edit_user', {
-      title: 'Edit User',
-      results: result.rows[0],
-      query: req.params.id,
-    });
-  } catch (error) {
-    console.error('Error executing user edit', error.stack);
-    res.status(500).send('Internal Server Error');
+      res.render('edit_user', {
+        title: 'Edit User',
+        results: result.rows[0],
+        query: req.params.id,
+      });
+    } catch (error) {
+      console.error('Error executing user edit', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
 // update submit new user
 router.post('/users/edit/:id', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'UPDATE Admin SET user_id=$1, user_pass=$2, user_email=$3 WHERE id=$4',
+          [req.body.user_id, req.body.user_pass, req.body.user_email, req.params.id]
+      );
 
-  try {
-    const result = await pool.query(
-        'UPDATE Admin SET user_id=$1, user_pass=$2, user_email=$3 WHERE id=$4',
-        [req.body.user_id, req.body.user_pass, req.body.user_email, req.params.id]
-    );
+      res.render('results', {
+        title: 'SUCCESS - User Updated',
+        results: 'SUCCESS - User Updated',
+        goback: '/users/'
+      });
 
-    res.render('results', {
-      title: 'SUCCESS - User Updated',
-      results: 'SUCCESS - User Updated',
-      goback: '/users/'
-    });
-
-  } catch (error) {
-    console.error('Error executing user update', error.stack);
-    res.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.error('Error executing user update', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
   }
-
+  else {
+    res.redirect('/login');
+  }
 });
 
 // Delete post
 router.delete('/users/:id', async (req, res) => {
-  try {
-    const result = await pool.query(
-        'DELETE FROM Admin WHERE id=$1',
-        [req.params.id]
-    );
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'DELETE FROM Admin WHERE id=$1',
+          [req.params.id]
+      );
 
-    res.render('results', {
-      title: 'SUCCESS - User Deleted',
-      results: 'SUCCESS - User Deleted',
-      goback: '/users/'
-    });
+      res.render('results', {
+        title: 'SUCCESS - User Deleted',
+        results: 'SUCCESS - User Deleted',
+        goback: '/users/'
+      });
 
-  } catch (error) {
-    console.error('Error executing user delete', error.stack);
-    res.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.error('Error executing user delete', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
 // get single user
 router.get('/users/:id', async (req, res) => {
-  try {
-    const result = await pool.query(
-        'SELECT * FROM Admin WHERE id=$1',
-        [req.params.id]
-    );
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'SELECT * FROM Admin WHERE id=$1',
+          [req.params.id]
+      );
 
-    console.error("user JSON.stringify(result): " + JSON.stringify(result));
-    console.error(result.rows[0]);
-    console.error("user JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
+      console.error("user JSON.stringify(result): " + JSON.stringify(result));
+      console.error(result.rows[0]);
+      console.error("user JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
 
-    res.render('user', {
-      title: 'Get User',
-      results: result.rows[0],
-      query: req.params.id,
-    });
-  } catch (error) {
-    console.error('Error executing user query', error.stack);
-    res.status(500).send('Internal Server Error');
+      res.render('user', {
+        title: 'Get User',
+        results: result.rows[0],
+        query: req.params.id,
+      });
+    } catch (error) {
+      console.error('Error executing user query', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
@@ -220,130 +247,159 @@ const Controller = require('../models/controller');
 
 /* list all controllers */
 router.get('/controllers/', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM Controllers');
-    res.render('controllers', {
-      title: 'Controllers',
-      results: result.rows,
-    });
-  } catch (error) {
-    console.error('Error executing query', error.stack);
-    res.status(500).send('Internal Server Error');
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query('SELECT * FROM Controllers');
+      res.render('controllers', {
+        title: 'Controllers',
+        results: result.rows,
+      });
+    } catch (error) {
+      console.error('Error executing query', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
 // new controller form
 router.get('/controllers/add', function (req, res) {
-  res.render('add_controller', {
-    title: 'Add Controller'
-  });
+  if(req.isAuthenticated()) {
+    res.render('add_controller', {
+      title: 'Add Controller'
+    });
+  }
+  else {
+    res.redirect('/login');
+  }
 });
 
 // submit new controller
 router.post('controllers/add', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'INSERT INTO Controllers (controller_name, client_id, client_secret) VALUES ($1, $2, $3)',
+          [req.body.controller_name, req.body.client_id, req.body.client_secret]
+      );
 
-  try {
-    const result = await pool.query(
-        'INSERT INTO Controllers (controller_name, client_id, client_secret) VALUES ($1, $2, $3)',
-        [req.body.controller_name, req.body.client_id, req.body.client_secret]
-    );
+      res.render('results', {
+        title: 'SUCCESS - Controller Added',
+        results: 'SUCCESS - Controller Added',
+        goback: '/controllers/'
+      });
 
-    res.render('results', {
-      title: 'SUCCESS - Controller Added',
-      results: 'SUCCESS - Controller Added',
-      goback: '/controllers/'
-    });
-
-  } catch (error) {
-    console.error('Error executing user add', error.stack);
-    res.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.error('Error executing user add', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
   }
-
+  else {
+    res.redirect('/login');
+  }
 });
 
 // load edit form
 router.get('/controllers/edit/:id', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'SELECT * FROM Controllers WHERE id=$1',
+          [req.params.id]
+      );
 
-  try {
-    const result = await pool.query(
-        'SELECT * FROM Controllers WHERE id=$1',
-        [req.params.id]
-    );
-
-    res.render('edit_controller', {
-      title: 'Edit Controller',
-      results: result.rows[0],
-      query: req.params.id,
-    });
-  } catch (error) {
-    console.error('Error executing controller edit', error.stack);
-    res.status(500).send('Internal Server Error');
+      res.render('edit_controller', {
+        title: 'Edit Controller',
+        results: result.rows[0],
+        query: req.params.id,
+      });
+    } catch (error) {
+      console.error('Error executing controller edit', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
 // update submit new controller
 router.post('/controllers/edit/:id', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'UPDATE Controllers SET controller_name=$1, client_id=$2, client_secret=$3 WHERE id=$4',
+          [req.body.controller_name, req.body.client_id, req.body.client_secret, req.params.id]
+      );
 
-  try {
-    const result = await pool.query(
-        'UPDATE Controllers SET controller_name=$1, client_id=$2, client_secret=$3 WHERE id=$4',
-        [req.body.controller_name, req.body.client_id, req.body.client_secret, req.params.id]
-    );
+      res.render('results', {
+        title: 'SUCCESS - Controller Updated',
+        results: 'SUCCESS - Controller Updated',
+        goback: '/controllers/'
+      });
 
-    res.render('results', {
-      title: 'SUCCESS - Controller Updated',
-      results: 'SUCCESS - Controller Updated',
-      goback: '/controllers/'
-    });
-
-  } catch (error) {
-    console.error('Error executing controller update', error.stack);
-    res.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.error('Error executing controller update', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
 // Delete post
 router.delete('/controllers/:id', async (req, res) => {
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'DELETE FROM Controllers WHERE id=$1',
+          [req.params.id]
+      );
 
-  try {
-    const result = await pool.query(
-        'DELETE FROM Controllers WHERE id=$1',
-        [req.params.id]
-    );
+      res.render('results', {
+        title: 'SUCCESS - Controller Deleted',
+        results: 'SUCCESS - Controller Deleted',
+        goback: '/controllers/'
+      });
 
-    res.render('results', {
-      title: 'SUCCESS - Controller Deleted',
-      results: 'SUCCESS - Controller Deleted',
-      goback: '/controllers/'
-    });
-
-  } catch (error) {
-    console.error('Error executing controller delete', error.stack);
-    res.status(500).send('Internal Server Error');
+    } catch (error) {
+      console.error('Error executing controller delete', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
   }
-
+  else {
+    res.redirect('/login');
+  }
 });
 
 // get single controller
 router.get('/controllers/:id', async (req, res) => {
-  try {
-    const result = await pool.query(
-        'SELECT * FROM Controllers WHERE id=$1',
-        [req.params.id]
-    );
+  if(req.isAuthenticated()) {
+    try {
+      const result = await pool.query(
+          'SELECT * FROM Controllers WHERE id=$1',
+          [req.params.id]
+      );
 
-    console.error("controller JSON.stringify(result): " + JSON.stringify(result));
-    console.error(result.rows[0]);
-    console.error("controller JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
+      console.error("controller JSON.stringify(result): " + JSON.stringify(result));
+      console.error(result.rows[0]);
+      console.error("controller JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
 
-    res.render('controller', {
-      title: 'Get Controller',
-      results: result.rows[0],
-      query: req.params.id,
-    });
-  } catch (error) {
-    console.error('Error executing controller query', error.stack);
-    res.status(500).send('Internal Server Error');
+      res.render('controller', {
+        title: 'Get Controller',
+        results: result.rows[0],
+        query: req.params.id,
+      });
+    } catch (error) {
+      console.error('Error executing controller query', error.stack);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+  else {
+    res.redirect('/login');
   }
 });
 
