@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
+const passport = require('passport');
 var request = require('request');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
@@ -18,8 +18,10 @@ const pool = new Pool({
 
 /* user login */
 router.get('/login', function (req, res, next) {
+  console.log('login get');
   if (req.isAuthenticated()) {
-    res.redirect('users/');
+    console.log('logged in');
+    res.redirect('/users/');
   }
   else{
     res.render('login', {title: "Log in", userData: req.user, messages: {danger: req.flash('danger'), warning: req.flash('warning'), success: req.flash('success')}});
@@ -27,16 +29,13 @@ router.get('/login', function (req, res, next) {
 });
 
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/account',
+  successRedirect: '/users/',
   failureRedirect: '/login',
   failureFlash: true
 }), function(req, res) {
-  if (req.body.remember) {
-    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
-  } else {
-    req.session.cookie.expires = false; // Cookie expires at end of session
-  }
-  res.redirect('/');
+  console.log('post logged in');
+  req.session.cookie.expires = false; // Cookie expires at end of session
+  res.redirect('/users');
 });
 
 router.get('/logout', function(req, res){
@@ -81,6 +80,7 @@ const User = require('../models/user');
 
 /* list all users */
 router.get('/users/', async (req, res) => {
+  console.log('in /users');
   if(req.isAuthenticated()) {
     try {
       const result = await pool.query(
@@ -348,8 +348,12 @@ router.get('/controllers/:id', async (req, res) => {
 });
 
 
-passport.use('local', new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => {
-
+passport.use('local', new LocalStrategy({
+  usernameField: 'user_email',
+  passwordField: 'user_pass',
+  passReqToCallback : true
+    }, (req, username, password, done) => {
+  console.log('in local passport authentication');
       loginAttempt();
       async function loginAttempt() {
 

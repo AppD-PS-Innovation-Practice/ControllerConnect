@@ -1,6 +1,14 @@
 extends layout
 
 block content
+  if successMessages.length
+    .alert.alert-success
+      each msg in successMessages
+        p= msg
+  if errorMessages.length
+    .alert.alert-danger
+      each msg in errorMessages
+        p= msg
   .container
     .row.justify-content-center
       .col-md-6
