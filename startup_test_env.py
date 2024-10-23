@@ -31,6 +31,8 @@ with os.scandir('./run_time/ui') as entries:
             shutil.rmtree(entry.path)
 time.sleep(10)
 print('Copying src files to mount point')
+shutil.copy('./src/db_sync/getControllerApplications.py','./run_time/db_sync')
+shutil.copy('./src/db_sync/database.ini','./run_time/db_sync')
 shutil.copy('./src/ui/package.json','./run_time/ui')
 shutil.copy('./src/ui/package-lock.json','./run_time/ui')
 shutil.copy('./src/ui/app.js', './run_time/ui')
@@ -40,8 +42,6 @@ shutil.copytree('./src/ui/routes','./run_time/ui/routes')
 shutil.copytree('./src/ui/models','./run_time/ui/models')
 shutil.copytree('./src/ui/views','./run_time/ui/views')
 shutil.copytree('./src/ui/node_modules', './run_time/ui/node_modules')
-
-shutil.copy('./src/db_sync/getControllerApplications.py', './run_time/db_sync')
 
 print('Sleeping before doing docker compose with build...')
 time.sleep(15)
