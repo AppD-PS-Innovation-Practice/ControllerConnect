@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1 AppDynamics Controller Connect - User CRUD
-
+  p
     if results.length
         ul.list-group
             each result in results
@@ -11,6 +11,5 @@ block content
     else
         p No results found.
 
-    a(href='/users/add') Add User
-
+    a.btn.btn-primary(href='/users/add') Add User
 
