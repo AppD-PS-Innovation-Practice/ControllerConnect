@@ -40,9 +40,13 @@ router.post('/login', passport.authenticate('local', {
 
 router.get('/logout', function(req, res){
   console.log(req.isAuthenticated());
-  req.logout();
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
   console.log(req.isAuthenticated());
-  req.flash('success', "Logged out. See you soon!");
+
   res.redirect('/');
 });
 
@@ -273,7 +277,7 @@ router.get('/controllers/add', function (req, res) {
 });
 
 // submit new controller
-router.post('controllers/add', async (req, res) => {
+router.post('/controllers/add', async (req, res) => {
   if(req.isAuthenticated()) {
     try {
       const result = await pool.query(

@@ -2,10 +2,20 @@ extends layout
 
 block content
   h1 AppDynamics Controller Connect
-  h1 #{title}
   h5 Controller Details
-  p #{results.controller_name}
-  p #{results.client_id}
-  p #{results.client_secret}
-  a.btn.btn-primary(href='/controllers/edit/'+query) Edit
-  a.btn.btn-danger.delete-controller(href='#', data-id=query) Delete
+  dl
+    dt Controller Name:
+    dd #{results.controller_name}
+    dt Client ID:
+    dd #{results.client_id}
+    dt Client Secret:
+    dd #{results.client_secret}
+  .button-group
+    a.btn.btn-primary(href='/controllers/edit/'+query) Edit
+    a.btn.btn-danger.delete-controller(href='#', data-id=query) Delete
+
+  // Add some CSS to space the buttons
+  style.
+    .button-group a {
+      margin-right: 10px; /* Adjust the value as needed */
+    }

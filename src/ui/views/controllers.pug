@@ -16,14 +16,40 @@ block content
                     tr
                         td= result.id
                         td= result.controller_name
+                        td= result.client_id
                         td
                             form(action='/controllers/' + result.id method='GET')
                                 button.btn.btn-primary(type='submit') View Controller
                             br
                             form(action='/controllers/edit/' + result.id method='GET')
                                 button.btn.btn-primary(type='submit') Edit Controller
+                            br
+                            button.btn.btn-danger(type='button', onclick=`deleteController('${result.id}')`) Delete
     else
         p No results found.
 
     form(action='/controllers/add' method='GET')
         button.btn.btn-primary(type='submit') Add Controller
+
+    // Add JavaScript to handle the delete request
+    script.
+        function deleteController(id) {
+            if (confirm("Are you sure you want to delete this controller?")) {
+                fetch(`/controllers/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Controller deleted successfully');
+                            // Optionally redirect or update the page
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete controller');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the controller');
+                    });
+            }
+        }
