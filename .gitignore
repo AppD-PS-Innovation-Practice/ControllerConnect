@@ -134,3 +134,4 @@ src/ui/.idea
 run_time/pg_data/pgdata
 run_time/ui/*
 src/db_sync/database.ini
+/run_time/db_sync/

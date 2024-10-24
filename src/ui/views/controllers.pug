@@ -19,6 +19,9 @@ block content
                         td
                             form(action='/controllers/' + result.id method='GET')
                                 button.btn.btn-primary(type='submit') View Controller
+                            br
+                            form(action='/controllers/edit/' + result.id method='GET')
+                                button.btn.btn-primary(type='submit') Edit Controller
     else
         p No results found.
 
