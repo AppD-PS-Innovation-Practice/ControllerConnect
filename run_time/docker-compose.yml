@@ -40,6 +40,14 @@ services:
       #POSTGRES_INITDB_WALDIR
       #POSTGRES_HOST_AUTH_METHOD
 
+  cron:
+    build:
+      context: ../
+      dockerfile: ./run_time/Dockerfile-Cron
+    working_dir: /app
+    volumes:
+       - ./db_sync/getControllerApplications.py:/app/getControllerApplications.py
+       - ./db_sync/database.ini:/app/database.ini
 
   adminer:
     image: adminer
