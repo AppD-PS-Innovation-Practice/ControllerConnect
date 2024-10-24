@@ -1,14 +1,26 @@
 extends layout
 
 block content
-  h1 AppDynamics Controller Connect - Controller CRUD
+    h1 AppDynamics Controller Connect - Controller
 
     if results.length
-        ul.list-group
-            each result in results
-                li.list-group-item
-                    a(href='/controllers/'+result.id)= result.controller_name
+        table.table.table-striped
+            thead
+                tr
+                    th ID
+                    th Controller Name
+                    th Client ID
+                    th Actions
+            tbody
+                each result in results
+                    tr
+                        td= result.id
+                        td= result.controller_name
+                        td
+                            form(action='/controllers/' + result.id method='GET')
+                                button.btn.btn-primary(type='submit') View Controller
     else
         p No results found.
 
-    a(href='/controllers/add') Add Controller
+    form(action='/controllers/add' method='GET')
+        button.btn.btn-primary(type='submit') Add Controller

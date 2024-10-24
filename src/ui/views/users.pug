@@ -1,16 +1,31 @@
 extends layout
 
 block content
-  h1 AppDynamics Controller Connect - User CRUD
+  h1 AppDynamics Controller Connect - Users
 
-    if results.length
-        ul.list-group
-            each result in results
-                li.list-group-item
-                    a(href='/users/'+result.id)= result.id
-    else
-        p No results found.
+  if results.length
+      table.table.table-striped
+          thead
+              tr
+                  th ID
+                  th User Email
+                  th Actions
+          tbody
+              each result in results
+                  tr
+                      td= result.id
+                      td= result.user_email
+                      td
+                          form(action='/users/' + result.id method='GET')
+                              button.btn.btn-primary(type='submit') View User
+                          br
+                          form(action='/users/edit/' + result.id method='GET')
+                              button.btn.btn-primary(type='submit') Edit User
 
-    a(href='/users/add') Add User
+  else
+      p No results found.
+
+  form(action='/users/add' method='GET')
+      button.btn.btn-primary(type='submit') Add User
 
 

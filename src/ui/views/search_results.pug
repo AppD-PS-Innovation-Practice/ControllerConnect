@@ -2,20 +2,28 @@ extends layout
 
 block content
     h1 AppDynamics Controller Connect
-        p Use the form below to search for controllers.
+    p Use the form below to search for controllers.
 
-        form(action="/search" method="GET")
-            .form-group
-                label(for="searchQuery") Search Query:
-                input#searchQuery.form-control(type="text" name="query" placeholder="Enter search term" required)
-            .form-group
-                button.btn.btn-primary(type="submit") Search
-    h1 Search Results for "#{query}"
+    form(action="/search" method="GET")
+        .form-group
+            label(for="searchQuery") Search Query:
+            input#searchQuery.form-control(type="text" name="query" placeholder="Enter search term" required)
+        .form-group
+            button.btn.btn-primary(type="submit") Search
+    h3 Search Results for "#{query}"
     if results.length
-        ul.list-group
-            each result in results
-                li.list-group-item
-                    a(href=`https://${result.controller_name}.saas.appdynamics.com/controller/#/location=APP_DASHBOARD&application=${result.app_id}` target="_blank")= result.controller_name + "---" + result.app_name
-
+        table.table.table-striped
+            thead
+                tr
+                    th Controller Name
+                    th Application Name
+                    th Link
+            tbody
+                each result in results
+                    tr
+                        td= result.controller_name
+                        td= result.app_name
+                        td
+                            a(href=`https://${result.controller_name}.saas.appdynamics.com/controller/#/location=APP_DASHBOARD&application=${result.app_id}` target="_blank") View Dashboard
     else
         p No results found.
