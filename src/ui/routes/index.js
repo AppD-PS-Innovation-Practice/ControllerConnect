@@ -222,10 +222,6 @@ router.get('/users/:id', async (req, res) => {
           [req.params.id]
       );
 
-      console.error("user JSON.stringify(result): " + JSON.stringify(result));
-      console.error(result.rows[0]);
-      console.error("user JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
-
       res.render('user', {
         title: 'Get User',
         results: result.rows[0],
@@ -383,10 +379,6 @@ router.get('/controllers/:id', async (req, res) => {
           'SELECT * FROM Controllers WHERE id=$1',
           [req.params.id]
       );
-
-      console.error("controller JSON.stringify(result): " + JSON.stringify(result));
-      console.error(result.rows[0]);
-      console.error("controller JSON.stringify(result.rows[0]): " + JSON.stringify(result.rows[0]));
 
       res.render('controller', {
         title: 'Get Controller',
