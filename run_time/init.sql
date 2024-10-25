@@ -20,6 +20,5 @@ CREATE TABLE IF NOT EXISTS admin (
   user_email varchar(250) NOT NULL
 );
 
-INSERT INTO controllers (controller_name, client_id, client_secret) VALUES ('appdynamicsinc-non-prod', 'singlepane', 'dcd1f726-b4ec-4986-98d3-8866f26a038e');
-INSERT INTO controllers (controller_name, client_id, client_secret) VALUES ('amer-ps-sandbox', 'singlepane', 'a6437b8b-e431-415e-a1c2-8e1f8ec68bad');
+
 INSERT INTO admin (user_email, user_pass) VALUES ('admin@admin.com', '$2a$05$iEkIwNIrV0x2WetvzMWkWerPIeTkpwdtLq9eNUYr43Bh5JionaUy6');
