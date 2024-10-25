@@ -23,12 +23,15 @@ if args.dbclean:
                 os.unlink(entry.path)
             else:
                 shutil.rmtree(entry.path)
-with os.scandir('./run_time/ui') as entries:
-    for entry in entries:
-        if entry.is_file():
-            os.unlink(entry.path)
-        else:
-            shutil.rmtree(entry.path)
+if not os.path.exists('./run_time/ui'):
+    os.makedirs('./run_time/ui')
+else:
+    with os.scandir('./run_time/ui') as entries:
+        for entry in entries:
+            if entry.is_file():
+                os.unlink(entry.path)
+            else:
+                shutil.rmtree(entry.path)
 
 shutil.rmtree('./run_time/db_sync')
 time.sleep(10)
