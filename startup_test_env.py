@@ -33,7 +33,8 @@ else:
             else:
                 shutil.rmtree(entry.path)
 
-shutil.rmtree('./run_time/db_sync')
+if os.path.exists('./run_time/db_sync'):
+    shutil.rmtree('./run_time/db_sync')
 time.sleep(10)
 print('Copying src files to mount point')
 shutil.copytree('./src/db_sync','./run_time/db_sync')
