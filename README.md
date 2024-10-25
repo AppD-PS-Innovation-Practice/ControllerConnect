@@ -6,11 +6,15 @@ This solution is made up of 3 Docker containers:
 1. UI - NodeJS web application
 	Users can search for application across controllers that have been added to the ControllerConnect data store
 	Admin users can also configure tracked controllers as well as admin users
-2. DB - Postgres database
-	3 tables
-		1. controllers
-		2. applications
-		3. admin
+
+2. DB - Postgres database containing data store to be searched
+
+	Tables listing:
+
+		a. controllers
+		b. applications
+		c. admin
+
 3. CRON - scheduled task running python script
 	every 15 minutes, python script makes API requests to configured controllers 
 	to update latest list of applications belonging to tracked controllers
@@ -46,8 +50,8 @@ For each controller to be tracked, create client id and note client secret as fo
 2. Users can enter search terms to look for applications in application database table
 3. Returned search results will have controller name, application name, and link to application
 
-## Support ##
+## GitHub ##
 
-[GitHub]: https://github.com/AppD-PS-Innovation-Practice/ControllerConnect
+https://github.com/AppD-PS-Innovation-Practice/ControllerConnect
 
 
