@@ -8,7 +8,7 @@ RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
     && pip install psycopg2
 
-RUN echo "*/5 * * * * /usr/local/bin/python /app/getControllerApplications.py DEBUG /app/database.ini >> /app/concon_log.log 2>&1" > /etc/cron.d/concon_cron
+RUN echo "*/15 * * * * /usr/local/bin/python /app/getControllerApplications.py DEBUG /app/database.ini >> /app/concon_log.log 2>&1" > /etc/cron.d/concon_cron
 
 RUN chmod 0644 /etc/cron.d/concon_cron
 
