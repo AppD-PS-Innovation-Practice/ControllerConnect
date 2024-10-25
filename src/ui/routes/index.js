@@ -170,7 +170,10 @@ router.get('/users/edit/:id', async (req, res) => {
 // update submit new user
 router.post('/users/edit/:id', async (req, res) => {
   if(req.isAuthenticated()) {
-    const user = await User.findById(req.user.id);
+    const user = await pool.query(
+        'SELECT * FROM admin WHERE id=$1',
+        [req.params.id]
+    );
     var pwd = user.user_pass;
     if(req.body.user_pass && req.body.user_pass.trim() !== '' && req.body.user_pass !== pwd) {
       var pwd = await bcrypt.hash(req.body.user_pass, 5);
