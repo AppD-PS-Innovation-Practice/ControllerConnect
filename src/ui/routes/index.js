@@ -148,7 +148,7 @@ router.get('/users/edit/:id', async (req, res) => {
   if(req.isAuthenticated()) {
     try {
       const result = await pool.query(
-          'SELECT * FROM Admin WHERE id=$1',
+          'SELECT * FROM admin WHERE id=$1',
           [req.params.id]
       );
 
@@ -170,10 +170,16 @@ router.get('/users/edit/:id', async (req, res) => {
 // update submit new user
 router.post('/users/edit/:id', async (req, res) => {
   if(req.isAuthenticated()) {
+    const user = await User.findById(req.user.id);
+    var pwd = user.user_pass;
+    if(req.body.user_pass && req.body.user_pass.trim() !== '' && req.body.user_pass !== pwd) {
+      var pwd = await bcrypt.hash(req.body.user_pass, 5);
+    }
+
     try {
       const result = await pool.query(
-          'UPDATE Admin SET user_id=$1, user_pass=$2, user_email=$3 WHERE id=$4',
-          [req.body.user_id, req.body.user_pass, req.body.user_email, req.params.id]
+          'UPDATE admin SET user_pass=$1, user_email=$2 WHERE id=$3',
+          [pwd, req.body.user_email, req.params.id]
       );
 
       res.render('results', {
@@ -197,7 +203,7 @@ router.delete('/users/:id', async (req, res) => {
   if(req.isAuthenticated()) {
     try {
       const result = await pool.query(
-          'DELETE FROM Admin WHERE id=$1',
+          'DELETE FROM admin WHERE id=$1',
           [req.params.id]
       );
 
@@ -222,7 +228,7 @@ router.get('/users/:id', async (req, res) => {
   if(req.isAuthenticated()) {
     try {
       const result = await pool.query(
-          'SELECT * FROM Admin WHERE id=$1',
+          'SELECT * FROM admin WHERE id=$1',
           [req.params.id]
       );
 

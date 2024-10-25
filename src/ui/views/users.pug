@@ -1,31 +1,54 @@
 extends layout
 
 block content
-  h1 AppDynamics Controller Connect - Users
+    h1 AppDynamics Controller Connect - Users
 
-  if results.length
-      table.table.table-striped
-          thead
-              tr
-                  th ID
-                  th User Email
-                  th Actions
-          tbody
-              each result in results
-                  tr
-                      td= result.id
-                      td= result.user_email
-                      td
-                          form(action='/users/' + result.id method='GET')
-                              button.btn.btn-primary(type='submit') View User
-                          br
-                          form(action='/users/edit/' + result.id method='GET')
-                              button.btn.btn-primary(type='submit') Edit User
+    if results.length
+        table.table.table-striped
+            thead
+                tr
+                    th ID
+                    th User Email
+                    th Actions
+            tbody
+                each result in results
+                    tr
+                        td= result.id
+                        td= result.user_email
+                        td
+                            form(action='/users/' + result.id method='GET')
+                                button.btn.btn-primary(type='submit') View User
+                            br
+                            form(action='/users/edit/' + result.id method='GET')
+                                button.btn.btn-primary(type='submit') Edit User
+                            br
+                            button.btn.btn-danger(type='button', onclick=`deleteUser('${result.id}')`) Delete
 
-  else
-      p No results found.
+    else
+        p No results found.
 
-  form(action='/users/add' method='GET')
-      button.btn.btn-primary(type='submit') Add User
+    form(action='/users/add' method='GET')
+        button.btn.btn-primary(type='submit') Add User
 
-
+    // Add JavaScript to handle the delete request
+    script.
+        function deleteUser(id) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                fetch(`/controllers/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('User deleted successfully');
+                            // Optionally redirect or update the page
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete user');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the user');
+                    });
+            }
+        }

@@ -2,9 +2,18 @@ extends layout
 
 block content
   h1 AppDynamics Controller Connect
-  h1 #{title}
   h5 User Details
-  p #{results.user_email}
-  p #{results.user_pass}
-  a.btn.btn-primary(href='/users/edit/'+query) Edit
-  a.btn.btn-danger.delete-user(href='#', data-id=query) Delete
+  dl
+    dt User ID:
+    dd #{results.id}
+    dt User Email:
+    dd #{results.user_email}
+
+  .button-group
+    a.btn.btn-primary(href='/users/edit/'+query) Edit
+    a.btn.btn-danger.delete-user(href='#', data-id=query) Delete
+
+  style.
+    .button-group a {
+      margin-right: 10px; /* Adjust the value as needed */
+    }
